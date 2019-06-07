@@ -4,10 +4,10 @@ const { join } = require("path");
 const { EOL } = require("os");
 
 // Require Third-Party dependencies
-const { yellow, cyan } = require("kleur");
+const { cyan } = require("kleur");
 
 // Constants
-const grid = [];
+const GRID = [];
 
 /**
  * @async
@@ -17,22 +17,30 @@ const grid = [];
  */
 async function main() {
     // Filters datas of the config file
-    const configFile = await readFile(join(__dirname, "config.cfg"), { encoding: "utf8" });
-    const [ gridLimit, ...mowersConfig ] = configFile.split(EOL);
-    grid.push(...gridLimit.split(" "));
+    const letConfig = new Set("NESWLRF");
+    const message = "Configuration must contain the following letters : N-E-S-W and L-R-F. Check your config.cfg file.";
+    const fileConfig = await readFile(join(__dirname, "config.cfg"), { encoding: "utf8" });
+    const [ gridLimit, ...mowersConfig ] = fileConfig.toUpperCase().split(EOL);
+    GRID.push(...gridLimit.split(" "));
 
     // Init position & sequence mowers
     const mowers = []
     for (let i = 0; i < mowersConfig.length; i+=2) {
         const initialPos = mowersConfig[i];
         const sequence = mowersConfig[i+1];
+
         mowers.push([ initialPos, sequence ]);
     }
 
     // Loop on each mower
     for (const [ position, sequence ] of mowers) {
         let [ x, y, orient] = position.split(" ");
-        const [ posMaxX, posMaxY ] = grid;
+        const [ posMaxX, posMaxY ] = GRID;
+
+        // Check config
+        if (!letConfig.has(orient) || !sequence.split("").every((letter) => letConfig.has(letter))) {
+            throw new Error(message);
+        }
 
         for (const action of sequence) {
             switch (action) {
@@ -70,13 +78,12 @@ async function main() {
                     break;
 
                 default:
-                    throw new Error(`Actions must be ${yellow("L - R - F")} and find ${yellow(action)} action. Check your config.cfg`);
+                    break;
             }
         }
         // Log result
         console.log("==>", cyan([x, y, orient].join(" ")));
     }
 }
-
 
 main().catch(console.error);
