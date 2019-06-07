@@ -82,7 +82,10 @@ async function main() {
             }
         }
         // Log result
-        console.log("==>", cyan([x, y, orient].join(" ")));
+        const initialPos = `Initial position : ${cyan(position)}  / `
+        const prog = `Sequence : ${cyan(sequence)}  / `
+        const out = `Output : ${cyan([x, y, orient].join(" "))}`
+        console.log("Mower 1 ==>", initialPos, prog, out);
     }
 }
 
