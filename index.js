@@ -4,7 +4,7 @@ const { join } = require("path");
 const { EOL } = require("os");
 
 // Require Third-Party dependencies
-const { cyan } = require("kleur");
+const { cyan, yellow } = require("kleur");
 
 // Constants
 const GRID = [];
@@ -69,10 +69,10 @@ function mowerAnalyser(mower, index) {
         }
     }
     // Log result
-    const initialPos = `Initial position : ${cyan(position)}  / `
-    const prog = `Sequence : ${cyan(sequence)}  / `
-    const out = `Output : ${cyan([x, y, orient].join(" "))}`
-    console.log(`Mower ${index + 1} ==>`, initialPos, prog, out);
+    const initialPos = `Initial position : ${cyan(position)}  / `;
+    const prog = `Sequence : ${cyan(sequence)}  / `;
+    const out = `Output : ${cyan([x, y, orient].join(" "))}`;
+    console.log(`${yellow(`Mower ${index + 1}`)} ==>`, initialPos, prog, out);
 }
 
 /**
@@ -87,7 +87,7 @@ async function main() {
     GRID.push(...gridLimit.split(" "));
 
     // Init position & sequence mowers
-    const mowers = []
+    const mowers = [];
     for (let i = 0; i < mowersConfig.length; i+=2) {
         const initialPos = mowersConfig[i];
         const sequence = mowersConfig[i+1];
