@@ -12,8 +12,9 @@ const GRID = [];
 /**
  * @async
  * @func main
- * @desc Algo mowitnow
+ * @desc Parse & calculate mower trajectory
  * @returns {void}
+ * @throws Error
  */
 async function main() {
     // Filters datas of the config file
